@@ -1,0 +1,473 @@
+<html>
+
+    <head>
+{% load staticfiles %}
+
+        <meta http-equiv="X-UA-Compatible" content="IE=9">
+        <title>Persistent ODSI</title>
+        <link rel="shortcut icon" href="/static/images/favicon.ico" type="image/x-icon" />
+        <script type="text/javascript" src="/static/script/jquery.js"></script>
+        <script type="text/javascript" src="/static/script/jquery-ui-1.10.4.custom.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/css/style.css" />      
+        <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui-1.10.4.custom.css" />
+        <link rel="stylesheet" type="text/css" href="/static/css/avgrund.css" />           
+	<script type="text/javascript" src="/static/script/bootstrap.js"></script>        
+        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" /> 
+ <script type="text/javascript" src="/static/script/jquery.avgrund.js"></script>
+<script type="text/javascript">
+/*function details_popup(value,key)
+{
+alert('called');
+alert(value);
+alert(key);
+}*/
+</script>
+<script type="text/javascript">
+
+window.onload = function() { 
+    $('.install-btn').avgrund({
+        height: 250,
+        width: 370,
+        holderClass: 'custom',
+        showClose: true,
+        showCloseText: 'close',
+        onBlurContainer: '.container',
+        template: $('.modal-box').html()
+    });
+	
+	/*$.ajax({
+		url: 'http://10.233.52.111:8004/servicewithtag/',
+		contentType: "application/json",
+		dataType: "jsonp",
+		jsonp: "callback",
+		jsonpCallback: "test",
+
+		success: function (data)
+		{
+		
+			//console.log(data);
+			//console.log(data['1']);
+		    var existing_html = $('#sidebar-list ul').html();
+
+				$('#sidebar-list ul').html('');
+			$.each(data,function(key,value){
+				//console.log(key);
+				var list="";
+				list = list + "<li><span>"+value+"</span></li>";
+                //<ul class='sub' id='"+key+"'><li>hello</li></ul>
+				$("#sidebar-list ul").append(list);
+			});
+			$("#sidebar-list ul").append(existing_html);
+
+		}
+	});*/
+
+	var existing_html = $('#sidebar-list ul').html();
+	$.ajax({
+		url: 'http://10.233.52.111:8004/servicewithtag/',
+		contentType: "application/json",
+		dataType: "jsonp",
+		jsonp: "callback",
+		jsonpCallback: "test",
+
+		success: function (data)
+		{
+			//console.log(data);
+
+			//status report is already defined so..we are taking that to a variable before emptying the sidebar-list 
+            //var existing_html = $('#sidebar-list ul').html();
+			$('#sidebar-list ul').html('');  //emptying sidebar-list ul(div)
+			//console.log(data);
+			//console.log(existing_html);
+
+			var list="";
+			$.each(data,function(key,value){
+				list =list+ "<li><span>"+value[0]+"<span class='icon-collapse'></span></span><ul class='sub'>";
+				var tags = value[1].split(',');
+				for (i = 0; i < tags.length; i++) {
+					list = list+ "<li onClick='display_products_by_tag(\""+key+"\",\""+tags[i]+"\")'><span>"+tags[i]+"</span></li>";
+				}
+				
+				list = list + "</ul></li>";
+				
+			});
+			
+			$("#sidebar-list ul").html(list);
+			setSideBarCollapse();
+
+			
+			$("#sidebar_list").append(existing_html); //now appending -to get "status" at the end of side-bar list
+			
+			
+		}
+
+	});
+};
+
+
+
+function details_popup(service_id,value,key)
+{
+$.ajax({
+                url: 'http://10.233.52.111:8004/products/'+service_id+'/'+key,
+                contentType: "application/json",
+                dataType: "jsonp",
+                jsonp: "callback",
+                jsonpCallback: "test",
+
+                success: function (data)
+                {
+
+                 //console.log(data);
+
+
+                 $.each(data,function(key,value)
+{
+				//console.log(key+"   "+value)
+          
+
+var length=document.getElementsByName("details-button-popup").length;
+         //  alert(product_name+"     "+product_id+service_tag+version+os+architecture+service_id);
+           for(var i =0; i<length; i++)
+           {
+             document.getElementsByName("details-button-popup")[i].setAttribute("href","#popup-modal");
+
+           }
+          
+
+
+
+
+document.getElementById("pop-image").setAttribute("src","/static/images/logos/"+key+".png");
+document.getElementById("label-productname").innerHTML="Product Name :  "+value[0];
+document.getElementById("label-version").innerHTML="Version :  "+value[1];
+document.getElementById("label-architecture").innerHTML="Architecture :  "+value[3];
+document.getElementById("label-operatingsystem").innerHTML="Operating System :  "+value[2];
+//hiding the data in the openstack login form
+/*
+document.getElementById("os_form_serviceid").setAttribute("value",service_id);
+document.getElementById("os_form_productid").setAttribute("value",product_id);
+document.getElementById("os_form_service_tag").setAttribute("value",service_tag);
+document.getElementById("os_form_productname").setAttribute("value",product_name);
+document.getElementById("os_form_os").setAttribute("value",os);
+document.getElementById("os_form_version").setAttribute("value",version);
+document.getElementById("os_form_architecture").setAttribute("value",architecture);
+*/  
+
+
+                      });
+
+
+
+              
+                }
+
+
+});
+
+
+}
+
+ //************This method clickd returns the status of all the requests*************//
+function display_status_report()
+{
+$.ajax({
+    url: 'http://10.233.52.111:8004/req_status_all/',
+    contentType: "application/json",
+    dataType: "jsonp",
+    jsonp: "callback",
+    jsonpCallback: "test",
+    success: function (data)
+	{
+		//console.log(data);
+        //console.log(data['1']);
+$('#product_filter').html('');
+$('#product_filter').append("<table id='product_filter_table'  style='border:1px solid black;width:90%;'><thead><tr style='border 2px solid black;background-color:#DDD;'><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Request Id</th><th style='font-weight:bold;color:blue; padding:1px;border:1px solid black;'>Username</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Product Name</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Machine IP</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Status</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Remarks</th></tr></thead></table>");
+$.each(data,function(key,value){
+
+var tableData = "<tr style='border 2px solid black;background-color:#DDD;width:90%;'><td style='border:1px solid black;padding:5px;text-align:center;'>"+key+"</td>";
+
+for (var key in value) {
+ tableData = tableData + "<td style='border:1px solid black;padding:5px;text-align:center;'>"+value[key]+"</td>";
+}
+
+tableData = tableData + "</tr>";
+ $('#product_filter_table').append(tableData);
+});
+}
+});
+
+
+
+}
+
+
+</script>
+
+<script type="text/javascript">
+function display_products_by_tag(key,tagname)
+{
+var service_id = key;
+$.ajax({
+    url: 'http://10.233.52.111:8004/servicebytag/'+key+'/'+tagname+'/',
+    contentType: "application/json",
+    dataType: "jsonp",
+    jsonp: "callback",
+    jsonpCallback: "test",
+    success: function (data)
+	{
+		var products="<ul id='product_details' class='bxslider'>"
+      $.each(data,function(key,value)
+	  {
+	     //console.log(key);
+	//	 console.log(value);
+	products+='<li style=height:150px;width:200px;><div title='+value+'><div class=head><img src=/static/images/logos/'+key+'.png></div><button id=details_button name=details-button-popup class=btn data-toggle=modal style=position: relative;margin-left:30px; href=\'#popup-modal\' onclick=\'details_popup("'+service_id+'","'+value+'","'+key+'");\'>Details</button></div></li>';	 
+		
+//inner_html+= '<li><div title='+product_info[i-4]+'><div class=head><img src=/static/images/'+product_info[i+1]+'.png /></div><div class=content ></div><button id=button123 name=details-button-popup class=btn data-toggle=modal onclick=\'details_popup("'+product_info[i-4]+'","'+product_info[i+1]+'","'+product_info[i-3]+'","'+product_info[i-3]+'","'+product_info[i-2]+'","'+product_info[i-1]+'","'+product_info[i+2]+'");\' >Details</button></div></li>';
+
+ 
+	  });
+	
+	
+	$("#product_filter").html(products+"</ul>");
+	
+	
+	}
+	
+});
+
+ 
+  //alert("here is the sample function  "+key+"  "+tagname );
+
+ }
+
+
+
+function changetab_next()
+{
+alert("next clicked");
+}
+
+</script>
+
+
+</head>
+	
+
+    <body>
+
+        <div class="page">
+            <div id="header">
+                <h1><span>Persistent</span>On Demand Software Installation</h1>
+                <span class="tagline">Partners in Innovation</span>
+                </span>
+                <div class="subheader"><a href="#">Applications</a>
+				<a href="#">Quality Engineering</a>
+                </div>
+            </div>
+            <div id="page-content">
+                <div id="page-content-inner">
+                    <div class="sidebar-before"></div>
+                    <div id="sidebar-list" class="sidebar">
+                        <ul id="sidebar_list" class="paging2">
+					    
+						 <li onclick="display_status_report();"><span>Status Report</span></li>
+
+
+                        </ul>
+
+                    </div>
+                    <div id="wrapper">
+                        <div id="toggle-button" class="close-panel"></div>
+                        <div id="softwaresPage">
+                            <div class="page-header"><span class="space">Quality Engineering</span><span>|</span><span class="sub-text">Software List for installation.</span>
+                            </div>
+							<div id="product_filter">
+							</div>
+<!--********************************************************************** -->
+<!--********************************************************************** -->
+<!--*********************     popup for details ************************** -->
+
+
+
+<div class="modal fade" id="popup-modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+  		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title" id="myModalLabel">
+						Configuration Details
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="tabbable" id="tabs-857719">
+						<ul class="nav nav-pills nav-justified">
+							<li id="details_li" class="active">
+				<a href="#details" id="details_d" data-toggle="tab">Details</a>
+							</li>
+							<li id="available_li">
+								<a href="#available" id="available_a" data-toggle="tab">Available</a>
+							</li>
+							<li id="cloud_li">
+								<a href="#cloud" id="cloud_a" data-toggle="tab">Cloud</a>
+							</li>					
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane active" id="details">
+								<p>
+								<form role="form">
+				<div>
+
+
+
+		<div width="80%" style="max-width: 208%;      white-space:nowrap;      overflow:hidden;      text-overflow:ellipsis;      -ms-text-overflow:ellipsis;      float: left;
+    margin-right: 61px; margin-top:60px">
+         <img id="pop-image" src="./images.jpg"/>
+
+</div>
+
+
+<div float="right" style="
+    white-space:nowrap;
+    overflow:hidden;      text-overflow:ellipsis;      -ms-text-overflow:ellipsis;">
+                <ul>
+                <li><label id="label-productname" >PRODUCT :MYSQL</label></li><br>
+                <li><label id="label-version">Version :  2.40<label></li><br>
+                <li><label id="label-architecture">Architecture :  x86_64</label></li><br>
+                <li><label id="label-operatingsystem">Operating System :  linux</label></li>
+                </ul>
+                </div>
+
+
+
+
+
+		<div class="btn-group" style=" float: right; margin-top: 3%; margin-right: 18%; ">
+			  <select id="installation_mode">
+			<option value="0">Mode </option>
+		<option value="existingvm">Install on Existing VM</option>
+		<option value="openstack">Provision VM on openstack</option>
+	 <option value="awsvm">Provision VM on AWS</option>
+			<option value="vmonothers">Provision VM on other service</option>
+				  </select>
+		</div>						
+
+
+
+
+
+			
+								</div>
+							</form>
+								</p>
+								<br><br>
+								<div class="modal-footer" style=" position: relative; margin-top: 19%; ">
+<button type="submit" id="selectednext" class="btn btn-primary" onclick="changetab_next();">Next</button> <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> 
+								</div>						
+							</div>
+							<div class="tab-pane" id="available">
+					<form role="form" action="/availablemachine_button/" method="POST">
+						{% csrf_token %}	
+								<br>
+								
+	<h3 style="margin-left: 27%"><span style=" width: 200px; " class="label label-info">Login for Available Machine</span></h3><br><br>
+	<div class="form-group"><label>IP address</label><input name="available_ipaddress" id="available_ipaddress" type="text" class="form-control" placeholder="Enter Machine IP" >
+									</div>
+									<br>
+<div class="form-group"><label>Username</label><input type="text" name="available_username" id="available_username" class="form-control" placeholder="Enter Username" >
+									</div>
+									<br>
+									<div class="form-group">
+										<label>Password</label>
+<input type="password" class="form-control" name="available_password" id="available_password" placeholder="Enter Password" >
+									</div>
+									<br>					  
+									<div class="modal-footer">
+<button type="submit" class="btn btn-primary" name="available_button" id="availablemachine_button">Login</button> <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button> 
+									</div>
+								</form>
+							</div>
+							<div class="tab-pane" id="cloud">
+								<div id="non_openstack_frm">
+				<form role="form" action="/loginbutton_aws/" method="POST">
+				{% csrf_token %}									
+	<br>
+
+
+
+<h3 style="margin-left: 27%"><span style=" width: 280px; " class="label label-info">Login for AWS</span></h3><br><br>
+
+	<div class="form-group"><label>Access ID</label><input name="aws_accessid" type="text" class="form-control" id="aws_accessid" placeholder="Enter Access ID" >
+										</div>
+										<br>
+										<div class="form-group">
+					<label>Secret key</label>
+<input type="password" class="form-control" name="aws_secretkey" id="aws_secretkey" placeholder="Enter Secret key" >
+										</div>
+										<br>
+										<div class="form-group"><label>KeyPair</label><input type="text" class="form-control" name="aws_keypair" id="aws_keypair" placeholder="Enter KeyPair" >
+										</div>
+										<br>			  
+										<br>
+									  <div class="modal-footer">
+<button type="submit" class="btn btn-primary" name="loginbutton_aws" id="loginbutton_aws">Login</button> <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button> 
+										</div>
+									</form>
+								</div>
+								<div id="openstack_frm">
+			<form role="form" id="openstack_login_form" action="/loginbutton_openstack/" method="POST">
+			{% csrf_token %}
+				<br>
+<h3 style="margin-left: 27%">	<span style=" width: 200px; " class="label label-info">Login for OpenStack</span> </h3>
+										<br>
+										<br>
+										<div class="form-group"><label>Username</label><input type="text" class="form-control" id="openstack_username" name="openstack_username" placeholder="Enter Username" >
+										</div>
+										<br>
+										<div class="form-group">
+											<label>Password</label>
+<input type="password" class="form-control" id="openstack_password" name="openstack_password" placeholder="Enter Password" >
+										</div>																				
+										<br>			  
+										<br>
+									  <div class="modal-footer">
+	<button type="button" class="btn btn-primary" name="loginbutton_openstack" id="loginbutton_openstack" onclick="openstack_login();">Login</button> <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button> 
+										</div>
+
+
+<input type="hidden" id="os_form_serviceid" name="os_form_serviceid" value="">
+<input type="hidden" id="os_form_productid" name="os_form_productid" value="">
+<input type="hidden" id="os_form_productname" name="os_form_productname" value="">
+<input type="hidden" id='os_form_os' name="os_form_os" value="">
+<input type="hidden" id="os_form_service_tag" name="os_form_service_tag" value="">
+<input type="hidden" id="os_form_version" name="os_form_version" value="">
+<input type="hidden" id="os_form_architecture" name="os_form_architecture" value="">
+
+
+
+
+
+
+
+		<button style=" margin-left: -24%; margin-top: 13%; width: 15%; height: 16%; " name="vmboot_next" id="vmboot_next" type="button" class="btn btn-primary" onclick="next_vmboot();" >Next</button><button style=" margin-left: 5%; margin-top: 13%; width: 15%; "type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+								
+	</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+<!--********************************************************************** -->
+<!--********************************************************************** -->
+
+    <script type="text/javascript" src="/static/script/common.js"></script>       
+</body>
+
+</html>
