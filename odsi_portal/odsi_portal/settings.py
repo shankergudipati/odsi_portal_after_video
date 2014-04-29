@@ -91,3 +91,8 @@ STATICFILES_DIRS = (
 '/root/odsi/odsi_portal/odsi_app/static/',
 )
 
+
+
+
+AUTHENTICATE_URL="http://10.233.52.111:8001/authenticate/"
+REQUEST_BOOT_VM_URL="http://10.233.52.111:8001/request/"
