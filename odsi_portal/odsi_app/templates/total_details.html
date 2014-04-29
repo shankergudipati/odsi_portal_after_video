@@ -30,7 +30,7 @@
         <script type="text/javascript" src="/static/script/bootstrap.js"></script>        
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css" />
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" />
-
+	
 
 <script type="text/javascript">
 $(document).ready(function()
@@ -315,6 +315,30 @@ if(strUser=="awsvm")
 }
 
 </script>
+<script>
+function hidedata_finalform()
+{
+
+document.getElementById("final_form_serviceid").setAttribute("value","{{service_id}}");
+document.getElementById("final_form_productid").setAttribute("value","{{product_id}}");
+
+document.getElementById("final_form_productname").setAttribute("value","{{productname}}");
+document.getElementById("final_form_os").setAttribute("value","{{os}}");
+document.getElementById("final_form_version").setAttribute("value","{{version}}");
+document.getElementById("final_form_architecture").setAttribute("value","{{architecture}}");
+document.getElementById("final_form_openstack_username").setAttribute("value","{{openstack_username}}");
+document.getElementById("final_form_openstack_password").setAttribute("value","{{openstack_password}}");
+document.getElementById("showdiv").style.display="block";
+document.getElementById("row-container").style.display="none";
+document.getElementById("showdiv").setAttribute("margin-left","45%");
+document.getElementById("showdiv").setAttribute("margin-top","20%");
+
+
+}
+</script>
+
+
+
 
 
 </head>
@@ -349,6 +373,86 @@ if(strUser=="awsvm")
 <div class="page-header"><span class="space">On Demand Software Installation</span><span>|</span><span class="sub-text">Software List for installation.</span>
                             </div>
 							<div id="product_filter">
+
+
+<!--********************************************************************** -->
+<!--********************************************************************** -->
+<!--********************* product new data **** ************************** -->
+
+<form action="/final_form_submit/" method="POST">
+{% csrf_token %}
+<div class="container">
+<div id="showdiv" style="display:none;">
+<img src="/static/images/logos/progress_bar_final.gif" height="8%" width="20%" />
+<h2>Porvisioning VM............</h2>
+</div>
+	<div class="row clearfix" id="row-container"  style="disply=block;">
+	<div class="col-md-6 column">
+			<div class="jumbotron" style="max-height: 492px; width: 600px;">
+			<h2><span class="label label-info" style="margin-left: 15%;">Operating System Details</span></h2>
+		<br>	<div style=" margin-left: 30%; ">
+				
+				<h4>OS              :  <span class="label label-default">Ubuntu 12.04 </span></h4><br>
+				<h4>HardDisk    :  <span class="label label-default">   40 GB</span></h4><br>
+				<h4>RAM           :  <span class="label label-default">   1024 MB</span></h4><br>
+				<h4>CPU           :  <span class="label label-default">   1</span></h4><br>
+				</div>		
+			<p>
+<button type="submit" class="btn btn-success btn-large" style="margin-left: 75%; width: 35%;height: 5.5%;font-size: 18px;margin-top:-7%;" onclick="hidedata_finalform();">Launch Instance</button>
+			</p>
+		</div>
+		</div>
+		<div class="col-md-6 column">
+			<div class="jumbotron" style="max-height: 492px;">
+			<h2><span class="label label-info" style="margin-left: 25%;">Product  Details</span></h2>
+				<br>
+				<div style=" margin-left: 20%; ">
+<img src="/static/images/logos/{{product_id}}.png" style="margin-left: 20%;" height="71px" width="163px">
+                                <br>
+				<h4>Product Name      :  <span class="label label-default"> {{productname}} </span></h4><br>
+				<h4>Version           :  <span class="label label-default"> {{version}}  </span></h4><br>
+				<h4>Architecture      :  <span class="label label-default"> {{architecture}}</span></h4><br>
+				<div>
+		<p>
+<button class="btn btn-success btn-large" style="margin-left: -26%; margin-top: -6%;width: 30%;height: 5.5%;font-size: 18px;">Cancel</a>
+		</p>
+		</div>
+		</div>
+	</div>
+</div>
+
+
+</div>
+</div>
+
+
+<input type="hidden" id="final_form_serviceid" name="final_form_serviceid" value="">
+<input type="hidden" id="final_form_productid" name="final_form_productid" value="">
+<input type="hidden" id="final_form_productname" name="final_form_productname" value="">
+<input type="hidden" id='final_form_os' name="final_form_os" value="">
+<input type="hidden" id="final_form_version" name="final_form_version" value="">
+<input type="hidden" id="final_form_architecture" name="final_form_architecture" value="">
+<input type="hidden" id="final_form_openstack_username" name="final_form_openstack_username" value="">
+<input type="hidden" id="final_form_openstack_password" name="final_form_openstack_password" value="">
+
+
+
+
+</form>
+
+
+
+
+
+<!--********************************************************************** -->
+<!--********************************************************************** -->
+<!--********************* product new data **** ************************** -->
+
+
+
+
+
+
 							</div>
 <!--********************************************************************** -->
 <!--********************************************************************** -->

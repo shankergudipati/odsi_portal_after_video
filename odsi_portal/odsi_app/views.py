@@ -36,7 +36,7 @@ def loginbutton_openstack(request):
     response = f.read()
     res = json.loads(response)
 
-    return render(request,"totaldetails.html",locals())
+    return render(request,"total_details.html",locals())
 
 def final_form_submit(request):
     pdb.set_trace()
