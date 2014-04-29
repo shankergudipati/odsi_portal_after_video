@@ -237,10 +237,10 @@ $.ajax({
     jsonpCallback: "test",
     success: function (data)
 	{
-		//console.log(data);
+		console.log(data);
         //console.log(data['1']);
 $('#product_filter').html('');
-$('#product_filter').append("<table id='product_filter_table'  style='border:1px solid black;width:90%;'><thead><tr style='border 2px solid black;background-color:#DDD;'><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Request Id</th><th style='font-weight:bold;color:blue; padding:1px;border:1px solid black;'>Username</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Product Name</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Machine IP</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Status</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Remarks</th></tr></thead></table>");
+$('#product_filter').append("<table id='product_filter_table'  style='border:1px solid black;width:90%;margin-left:65px'><thead><tr style='border 2px solid black;background-color:#DDD;'><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;text-align:center;'>Request Id</th><th style='font-weight:bold;color:blue; padding:1px;border:1px solid black;text-align:center;'>Username</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;text-align:center;'>Product Name</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;text-align:center;'>Machine IP</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;text-align:center;'>Status</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;text-align:center;'>Remarks</th></th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;text-align:center;'>Machine status</th></tr></thead></table>");
 $.each(data,function(key,value){
 
 var tableData = "<tr style='border 2px solid black;background-color:#DDD;width:90%;'><td style='border:1px solid black;padding:5px;text-align:center;'>"+key+"</td>";
@@ -327,8 +327,8 @@ if(strUser=="awsvm")
 <h1><span>Persistent</span>On Demand Software Installation</h1>
 <span class="tagline">Partners in Innovation</span>
 </span>
-<div class="subheader"><a href="#">Applications</a>
-<a href="#">Quality Engineering</a>
+<div class="subheader"><a href="#">Software Applications</a>
+<a href="#"></a>
 </div>
 </div>
 <div id="page-content">
