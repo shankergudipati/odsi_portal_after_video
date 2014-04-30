@@ -82,40 +82,6 @@ alert(key);
 </script>
 <script type="text/javascript">
 
-function display_all_products(){
-alert("this is all button");
-$.ajax({
-    url: 'http://10.233.52.111:8008/productsall/',
-    contentType: "application/json",
-    dataType: "jsonp",
-    jsonp: "callback",
-    jsonpCallback: "test",
-    success: function (data)
-        {
-                var products="<ul id='product_details' class='bxslider'>";
-      $.each(data,function(key,value)
-          {
-             //console.log(key);
-        //       console.log(value);
-        products+='<li style=height:150px;width:200px;><div title='+value+'><div class=head><img src=/static/images/logos/'+key+'.png></div><button id=details_button name=details-button-popup class=btn data-toggle=modal style=position: relative;margin-left:30px; href=\'#popup-modal\' onclick=\'details_popup("1","'+value+'","'+key+'");\'>Details</button></div></li>';
-          });
-        $("#product_filter").html(products+"</ul>");
-        }
-});
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
 window.onload = function() { 
     $('.install-btn').avgrund({
         height: 250,
@@ -172,7 +138,7 @@ window.onload = function() {
 			//console.log(data);
 			//console.log(existing_html);
 
-			var list="<li onClick='display_all_products();'><span>All<span class='icon-collapse'></span></span><li>";
+			var list="";
 			$.each(data,function(key,value){
 				list =list+ "<li><span>"+value[0]+"<span class='icon-collapse'></span></span><ul class='sub'>";
 				var tags = value[1].split(',');
@@ -314,11 +280,24 @@ $.ajax({
 	     //console.log(key);
 	//	 console.log(value);
 	products+='<li style=height:150px;width:200px;><div title='+value+'><div class=head><img src=/static/images/logos/'+key+'.png></div><button id=details_button name=details-button-popup class=btn data-toggle=modal style=position: relative;margin-left:30px; href=\'#popup-modal\' onclick=\'details_popup("'+service_id+'","'+value+'","'+key+'");\'>Details</button></div></li>';	 
+		
+//inner_html+= '<li><div title='+product_info[i-4]+'><div class=head><img src=/static/images/'+product_info[i+1]+'.png /></div><div class=content ></div><button id=button123 name=details-button-popup class=btn data-toggle=modal onclick=\'details_popup("'+product_info[i-4]+'","'+product_info[i+1]+'","'+product_info[i-3]+'","'+product_info[i-3]+'","'+product_info[i-2]+'","'+product_info[i-1]+'","'+product_info[i+2]+'");\' >Details</button></div></li>';
+
+ 
 	  });
+	
+	
 	$("#product_filter").html(products+"</ul>");
+	
+	
 	}
+	
 });
-}
+
+ 
+  //alert("here is the sample function  "+key+"  "+tagname );
+
+ }
 
 
 
@@ -370,7 +349,9 @@ if(strUser=="awsvm")
 <div class="page-header"><span class="space">On Demand Software Installation</span><span>|</span><span class="sub-text">Software List for installation.</span>
                             </div>
 							<div id="product_filter">
-							</div>
+	<div style=" border: 2px solid; border-radius: 110px; margin-left: 23%; margin-top: 12%; height: 6%; width: 55%; ">
+		<h2 style=" margin-left:9%; margin-top: 1%; color: blue; ">Authentication failed .... Please Try Again</h2>
+	</div>						</div>
 <!--********************************************************************** -->
 <!--********************************************************************** -->
 <!--*********************     popup for details ************************** -->
