@@ -30,65 +30,12 @@
         <script type="text/javascript" src="/static/script/bootstrap.js"></script>        
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css" />
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" />
-
-<style type='text/css'>
-.mask{
-   position: relative;
-   overflow: hidden;
-   margin: 0px auto;
-   width: 100%;
-}
-.header{
-   float: left;
-   width: 100%;
-}
-.colleft{
-   position: relative;
-   width: 100%;
-   right: 31%;
-}
-.col1{
-   position: relative;
-   overflow: hidden;
-   float: left;
-   width: 29%;
-   left: 101%;
-}
-.col2{
-   position: relative;
-   overflow: hidden;
-   float: left;
-   width: 67%;
-   left: 3%;
-}
-.footer{
-   float: right;
-   width: 100%;
-   text-align: end;
-   border-top: 1px solid #e5e5e5;
-   min-height: 16.428571429px;
-   padding: 15px;
-}
-
-.form-control {
-margin-right: 10%;
-width: 60%;
-}
-</style>
-
+	
 
 <script type="text/javascript">
 $(document).ready(function()
 	{		
-//$.preventDefault();
-
-
-$('#main_details_form').each (function(){
-  this.reset();
-});
-
-
-
+        display_status_report();
 
 		$('li#available_li').addClass('disabled');
 		$('a#available_a').attr('href','');
@@ -103,34 +50,18 @@ $('#main_details_form').each (function(){
 				if($('#installation_mode').val() == "existingvm"){
 					$('li#available_li').removeClass('disabled');
 					$('a#available_a').attr('href','#available');
-	//$('.nav-pills li').filter('.active').next('li').find('a[data-toggle="tab"]').tab('show');				
+					//$('.nav-pills li').filter('.active').next('li').find('a[data-toggle="tab"]').tab('show');				
 					$('li#available_li').find('a[data-toggle="tab"]').tab('show');				
 					$('li#available_li').show();
 					$('li#cloud_li').hide();
-	//				$("#main_details_form")[0].reset();
-          //                              $("#available_form")[0].reset();
-            //                            $("#aws_form")[0].reset();
-              //                          $("#openstack_login_form")[0].reset();
-				        
 				}
 				else if($('#installation_mode').val() == "openstack" || $('#installation_mode').val() == "awsvm" || $('#installation_mode').val() == "vmonothers"){
 					if($('#installation_mode').val() == "openstack"){
 						$('#non_openstack_frm').hide();
-		//				 $("#main_details_form")[0].reset();
-                  //                      $("#available_form")[0].reset();
-                    //                    $("#aws_form")[0].reset();
-                      //                  $("#openstack_login_form")[0].reset();
-
 						$('#openstack_frm').show();
-                                                  
 					}
 					else{
 						$('#openstack_frm').hide();
-			//			$("#main_details_form")[0].reset();
-                          //              $("#available_form")[0].reset();
-                            //            $("#aws_form")[0].reset();
-                              //          $("#openstack_login_form")[0].reset();
-
 						$('#non_openstack_frm').show();
 					}
 					$('li#cloud_li').removeClass('disabled');
@@ -139,58 +70,21 @@ $('#main_details_form').each (function(){
 					$('li#cloud_li').find('a[data-toggle="tab"]').tab('show');				
 					$('li#cloud_li').show();
 					$('li#available_li').hide();
-				//	$("#main_details_form")[0].reset();
-				//	 $("#main_details_form")[0].reset();
-                                  //      $("#available_form")[0].reset();
-                                    //    $("#aws_form")[0].reset();
-                                      //  $("#openstack_login_form")[0].reset();
-
 				}
 			}
 		});
 	});
+/*function details_popup(value,key)
+{
+alert('called');
+alert(value);
+alert(key);
+}*/
 </script>
 <script type="text/javascript">
 
-function display_all_products()
-{
-//alert("this is all button");
-$.ajax({
-    url: 'http://10.233.52.111:8008/productsall/',
-    contentType: "application/json",
-    dataType: "jsonp",
-    jsonp: "callback",
-    jsonpCallback: "test",
-    success: function (data)
-        {
-        //console.log(data);
-                var products="<ul id='product_details' class='bxslider'>";
-      $.each(data,function(key,value)
-          {
-            // console.log(key);
-            // console.log("name",value[0]);
-            // console.log("id",value[1]);
-
-        products+='<li style=height:150px;width:200px;><div title="'+value+'"><div class=head><img src=/static/images/logos/'+key+'.png></div><button id=details_button name=details-button-popup class=btn data-toggle=modal style=position: relative;margin-left:30px; href=\'#popup-modal\' onclick=\'details_popup("'+value[1]+'","'+value[0]+'","'+key+'");\'>Details</button></div></li>';
-          });
-        $("#product_filter").html(products+"</ul>");
-        }
-});
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-window.onload = function() { 
+window.onload = function() 
+{ 
     $('.install-btn').avgrund({
         height: 250,
         width: 370,
@@ -227,8 +121,7 @@ window.onload = function() {
 
 		}
 	});*/
-       // $("#main_details_form")[0].reset();
-        display_all_products();
+//	display_status_report();
 	var existing_html = $('#sidebar-list ul').html();
 	$.ajax({
 		url: 'http://10.233.52.111:8004/servicewithtag/',
@@ -247,7 +140,7 @@ window.onload = function() {
 			//console.log(data);
 			//console.log(existing_html);
 
-			var list="<li onClick='display_all_products();'><span>All<span class='icon-collapse'></span></span><li>";
+			var list="";
 			$.each(data,function(key,value){
 				list =list+ "<li><span>"+value[0]+"<span class='icon-collapse'></span></span><ul class='sub'>";
 				var tags = value[1].split(',');
@@ -270,10 +163,6 @@ window.onload = function() {
 
 	});
 
-/*********/
-
-
-
 
 };
 
@@ -281,11 +170,8 @@ window.onload = function() {
 
 function details_popup(service_id,value,key)
 {
- //console.log(service_id);
-   //             console.log(key);
 $.ajax({
                 url: 'http://10.233.52.111:8004/products/'+service_id+'/'+key,
-            
                 contentType: "application/json",
                 dataType: "jsonp",
                 jsonp: "callback",
@@ -299,7 +185,7 @@ $.ajax({
 
                  $.each(data,function(key,value)
 {
-//				console.log(service_id+"  "+key+"   "+value)
+				console.log(service_id+"  "+key+"   "+value)
           
 
 var length=document.getElementsByName("details-button-popup").length;
@@ -311,7 +197,7 @@ var length=document.getElementsByName("details-button-popup").length;
            }
           
 
-//console.log(value);
+
 
 
 document.getElementById("pop-image").setAttribute("src","/static/images/logos/"+key+".png");
@@ -329,18 +215,6 @@ document.getElementById("os_form_os").setAttribute("value",value[2]);
 document.getElementById("os_form_version").setAttribute("value",value[1]);
 document.getElementById("os_form_architecture").setAttribute("value",value[3]);
   
-//hiding data in available login form 
-
-
-
-document.getElementById("available_form_serviceid").setAttribute("value",service_id);
-document.getElementById("available_form_productid").setAttribute("value",key);
-document.getElementById("available_form_productname").setAttribute("value",value[0]);
-document.getElementById("available_form_os").setAttribute("value",value[2]);
-document.getElementById("available_form_version").setAttribute("value",value[1]);
-document.getElementById("available_form_architecture").setAttribute("value",value[3]);
-
-
 
 
                       });
@@ -370,7 +244,7 @@ $.ajax({
 		//console.log(data);
         //console.log(data['1']);
 $('#product_filter').html('');
-$('#product_filter').append("<table id='product_filter_table'  style='border:1px solid black;width:90%;margin-left:65px'><thead><tr style='border 2px solid black;background-color:#DDD;'><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;text-align:center;'>Request Id</th><th style='font-weight:bold;color:blue; padding:1px;border:1px solid black;text-align:center;'>Username</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;text-align:center;'>Product Name</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;text-align:center;'>Machine IP</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;text-align:center;'>Status</th><th style='font-weight:bold;color:blue; padding:10px;border:1px solid black;text-align:center;'>Remarks</th></tr></thead></table>");
+$('#product_filter').append("<table id='product_filter_table'  style='margin-left: 3%;border:1px solid black;width:90%;'><thead><tr style='border 2px solid black;background-color:#DDD;'><th style='font-weight:bold;color:blue;text-align: center;padding:10px;border:1px solid black;'>Request Id</th><th style='font-weight:bold;text-align: center;color:blue; padding:1px;border:1px solid black;'>Username</th><th style='font-weight:bold;text-align: center;color:blue; padding:10px;border:1px solid black;'>Product Name</th><th style='text-align: center;font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Machine IP</th><th style='text-align: center;font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Status</th><th style='text-align: center;font-weight:bold;color:blue; padding:10px;border:1px solid black;'>Remarks</th></tr></thead></table>");
 $.each(data,function(key,value){
 
 var tableData = "<tr style='border 2px solid black;background-color:#DDD;width:90%;'><td style='border:1px solid black;padding:5px;text-align:center;'>"+key+"</td>";
@@ -409,12 +283,25 @@ $.ajax({
 	  {
 	     //console.log(key);
 	//	 console.log(value);
-	products+='<li style=height:150px;width:200px;><div title="'+value+'"><div class=head><img src=/static/images/logos/'+key+'.png></div><button id=details_button name=details-button-popup class=btn data-toggle=modal style=position: relative;margin-left:30px; href=\'#popup-modal\' onclick=\'details_popup("'+service_id+'","'+value+'","'+key+'");\'>Details</button></div></li>';	 
+	products+='<li style=height:150px;width:200px;><div title='+value+'><div class=head><img src=/static/images/logos/'+key+'.png></div><button id=details_button name=details-button-popup class=btn data-toggle=modal style=position: relative;margin-left:30px; href=\'#popup-modal\' onclick=\'details_popup("'+service_id+'","'+value+'","'+key+'");\'>Details</button></div></li>';	 
+		
+//inner_html+= '<li><div title='+product_info[i-4]+'><div class=head><img src=/static/images/'+product_info[i+1]+'.png /></div><div class=content ></div><button id=button123 name=details-button-popup class=btn data-toggle=modal onclick=\'details_popup("'+product_info[i-4]+'","'+product_info[i+1]+'","'+product_info[i-3]+'","'+product_info[i-3]+'","'+product_info[i-2]+'","'+product_info[i-1]+'","'+product_info[i+2]+'");\' >Details</button></div></li>';
+
+ 
 	  });
+	
+	
 	$("#product_filter").html(products+"</ul>");
+	
+	
 	}
+	
 });
-}
+
+ 
+  //alert("here is the sample function  "+key+"  "+tagname );
+
+ }
 
 
 
@@ -422,7 +309,7 @@ function changetab_next()
 {
 var e = document.getElementById("installation_mode");
 var strUser = e.options[e.selectedIndex].value;
-//alert(strUser);
+alert(strUser);
 if(strUser=="awsvm")
 {
  document.getElementsById("selectednext").setAttribute("href","#cloud_a");
@@ -431,15 +318,31 @@ if(strUser=="awsvm")
 
 }
 
-
-
-function install_available()
+</script>
+<script>
+function hidedata_finalform()
 {
-//alert("called");
-document.getElementById("loader_availableform").style.display="block";
+
+document.getElementById("final_form_serviceid").setAttribute("value","{{service_id}}");
+document.getElementById("final_form_productid").setAttribute("value","{{product_id}}");
+
+document.getElementById("final_form_productname").setAttribute("value","{{productname}}");
+document.getElementById("final_form_os").setAttribute("value","{{os}}");
+document.getElementById("final_form_version").setAttribute("value","{{version}}");
+document.getElementById("final_form_architecture").setAttribute("value","{{architecture}}");
+document.getElementById("final_form_openstack_username").setAttribute("value","{{openstack_username}}");
+document.getElementById("final_form_openstack_password").setAttribute("value","{{openstack_password}}");
+document.getElementById("showdiv").style.display="block";
+document.getElementById("row-container").style.display="none";
+document.getElementById("showdiv").setAttribute("margin-left","45%");
+document.getElementById("showdiv").setAttribute("margin-top","20%");
+
 
 }
 </script>
+
+
+
 
 
 </head>
@@ -449,17 +352,17 @@ document.getElementById("loader_availableform").style.display="block";
 
 <div class="page">
 <div id="header">
-<h1><span>Persistent</span>Continuous Delivery Environment (CDE)</h1>
+<h1><span>Persistent</span>Continuous Delivery Environment(CDE)</h1>
 <span class="tagline">Partners in Innovation</span>
 </span>
 <div class="subheader"><a href="#">Software Applications</a>
-<a href="#"></a>
+<!-- <a href="#"></a> -->
 </div>
 </div>
 <div id="page-content">
 <div id="page-content-inner">
 <div class="sidebar-before"></div>
-<div id="sidebar-list" class="sidebar" style=" width: 16%; ">
+<div id="sidebar-list" class="sidebar">
 <ul id="sidebar_list" class="paging2">
 
 <li onclick="display_status_report();"><span>Status Report</span></li>
@@ -471,9 +374,23 @@ document.getElementById("loader_availableform").style.display="block";
 <div id="wrapper">
 <div id="toggle-button" class="close-panel"></div>
 <div id="softwaresPage">
-<div class="page-header"><span class="space">Continuous Delivery Environment</span><span>|</span><span class="sub-text">Software List for installation.</span>
-                            </div>
+<div class="page-header"><span class="space" style=" color: blue; margin-left: -17%; font-weight: bold; font-size: 20px; ">Request is initiated . REQUEST ID is {{res}}</span>                            </div>
 							<div id="product_filter">
+
+
+
+
+
+
+<!--********************************************************************** -->
+<!--********************************************************************** -->
+<!--********************* product new data **** ************************** -->
+
+
+
+
+
+
 							</div>
 <!--********************************************************************** -->
 <!--********************************************************************** -->
@@ -506,7 +423,7 @@ document.getElementById("loader_availableform").style.display="block";
 						<div class="tab-content">
 							<div class="tab-pane active" id="details">
 								<p>
-								<form id="main_details_form" role="form">
+								<form role="form">
 				<div>
 
 
@@ -536,7 +453,7 @@ document.getElementById("loader_availableform").style.display="block";
 		<div class="btn-group" style=" float: right; margin-top: 3%; margin-right: 18%; ">
 			  <select id="installation_mode">
 			<option value="0">Mode </option>
-		<option value="existingvm">Install on Existing Machine</option>
+		<option value="existingvm">Install on Existing VM</option>
 		<option value="openstack">Provision VM on openstack</option>
 	 <option value="awsvm">Provision VM on AWS</option>
 			<option value="vmonothers">Provision VM on other service</option>
@@ -552,72 +469,12 @@ document.getElementById("loader_availableform").style.display="block";
 							</form>
 								</p>
 								<br><br>
-
-
 								<div class="modal-footer" style=" position: relative; margin-top: 19%; ">
 <button type="submit" id="selectednext" class="btn btn-primary" >Next</button> <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> 
 								</div>						
 							</div>
-
-
-
-
-
-
-
-<!-- start Changes By Durga -->
-
-
-
 							<div class="tab-pane" id="available">
-					<form role="form" id="available_form" action="/availablemachine_button/" method="POST">
-
-	
-<div class="mask">
-    <div class="header">
-	{% csrf_token %} 
-	<h3 style="margin-left: 27%"><span style=" width: 200px; " class="label label-info">Login for Available Machine</span></h3>
-<br>
-    </div>
-    <div class="colleft">
-        <div class="col1" style="height:30%;">
-<div id="loader_availableform" style="display:none;">
- <img src="/static/images/logos/loader.gif"/>
-<br>
-Validating the details
-</div>
-        </div>
-        <div class="col2">
-            <div class="form-group"><label>IP address</label><input name="available_ipaddress" id="available_ipaddress" type="text" class="form-control" placeholder="Enter Machine IP" >
-                                                                        </div>
-                                                                        <br>
-<div class="form-group"><label>Username</label><input type="text" name="available_username" id="available_username" class="form-control" placeholder="Enter Username" >
-                                                                        </div>
-                                                                        <br>
-                                                                        <div class="form-group">
-                                                                                <label>Password</label>
-<input type="password" class="form-control" name="available_password" id="available_password" placeholder="Enter Password" >
-                                                                        </div>
-             
-	<input type="hidden" id="available_form_serviceid" name="available_form_serviceid" value="">
-	<input type="hidden" id="available_form_productid" name="available_form_productid" value="">
-	<input type="hidden" id="available_form_productname" name="available_form_productname" value="">
-	<input type="hidden" id='available_form_os' name="available_form_os" value="">
-	<input type="hidden" id="available_form_service_tag" name="available_form_service_tag" value="">
-	<input type="hidden" id="available_form_version" name="available_form_version" value="">
-
-        </div> 
-    </div> 
-    <div class="footer" style=" margin-top: 10%; ">
-<button type="submit" class="btn btn-primary" name="available_button" id="availablemachine_button" onclick="install_available();" >Install</button> <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-
-    </div>
-</div>
-
-<!-- Changes end -->
-
-<!--
-
+					<form role="form" action="/availablemachine_button/" method="POST">
 						{% csrf_token %}	
 								<br>
 								
@@ -636,30 +493,11 @@ Validating the details
 									<div class="modal-footer">
 <button type="submit" class="btn btn-primary" name="available_button" id="availablemachine_button">Login</button> <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button> 
 									</div>
-
-<input type="hidden" id="available_form_serviceid" name="available_form_serviceid" value="">
-<input type="hidden" id="available_form_productid" name="available_form_productid" value="">
-<input type="hidden" id="available_form_productname" name="available_form_productname" value="">
-<input type="hidden" id='available_form_os' name="available_form_os" value="">
-<input type="hidden" id="available_form_service_tag" name="available_form_service_tag" value="">
-<input type="hidden" id="available_form_version" name="available_form_version" value="">
-<input type="hidden" id="available_form_architecture" name="available_form_architecture" value="">
--->
-
 								</form>
 							</div>
-
-
-
-
-
-
-
-
-
 							<div class="tab-pane" id="cloud">
 								<div id="non_openstack_frm">
-				<form id="aws_form" role="form" action="/loginbutton_aws/" method="POST" data-toggle="validator">
+				<form role="form" action="/loginbutton_aws/" method="POST" data-toggle="validator">
 				{% csrf_token %}									
 	<br>
 
